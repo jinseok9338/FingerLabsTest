@@ -1,72 +1,79 @@
 import { useCallback, useMemo, useState } from "react";
 import { traitTypes } from "../consts";
 
-import { Techa } from "../types/techa";
 import { techaData } from "../data";
 
+const numberAddedtechaData = techaData.map((techa) => {
+  return {
+    ...techa,
+    number: techa.name.split("#")[1],
+  };
+});
+
 const useData = () => {
-  const [data, setData] = useState<Techa[]>(techaData);
-  const [filters, setFilters] = useState<
-    {
-      [key in traitTypes]: string[];
-    }[]
-  >([]);
+  const [filters, setFilters] = useState<{
+    [key in traitTypes]?: string[];
+  }>({} as any);
+
+  const [index, setIndex] = useState<string>("");
+
+  const handleSetIndex = useCallback(
+    (int: string) => {
+      setIndex(int);
+    },
+    [index]
+  );
 
   const handleSetfileters = useCallback(
     (traitType: traitTypes, value: string[]) => {
-      const newFilters = [...filters];
-      const index = newFilters.findIndex((filter) => filter[traitType]);
-      if (index === -1) {
-        newFilters.push({ [traitType]: value });
-      } else {
-        newFilters[index] = { [traitType]: value };
-      }
-      setFilters(newFilters);
+      setFilters((prev) => {
+        const existingValue = {
+          ...prev,
+          [traitType]: value,
+        };
+        // get rid of the empty array (value)
+        const filtered = Object.entries(existingValue).filter(
+          ([_, value]) => value.length > 0
+        );
+        // convert back to object
+        const filteredObject = Object.fromEntries(filtered);
+        return filteredObject;
+      });
     },
     [filters]
   );
 
-  //   const filterTecha = useCallback(
-  //     (traitType: traitTypes, value: string) => {
-  //       const filteredTecha = data.filter((techa) =>
-  //         techa.attributes.find(
-  //           (attribute) =>
-  //             attribute.trait_type === traitType && attribute.value === value
-  //         )
-  //       );
-  //       return filteredTecha;
-  //     },
-  //     [data]
-  //   );
-
   const filteredTacha = useMemo(() => {
     console.log("filters", filters);
-    if (
-      filters.length === 0 ||
-      filters.every((filter) =>
-        Object.values(filter).every((value) => value.length === 0)
-      )
-    ) {
-      return data;
-    }
-    let filteredTecha = techaData;
-    filters.forEach((filter) => {
-      const traitType = Object.keys(filter)[0] as traitTypes;
-      const value = filter[traitType];
-      filteredTecha = filteredTecha.filter((techa) =>
-        techa.attributes.find(
-          (attribute) =>
-            attribute.trait_type === traitType &&
-            value.includes(attribute.value)
-        )
+    console.log("index", index);
+
+    let data = numberAddedtechaData;
+    if (index) {
+      data = numberAddedtechaData.filter((techa) =>
+        techa.number.includes(index)
       );
-    });
-    return filteredTecha;
-  }, [filters]);
+    }
+
+    if (Object.keys(filters).length > 0) {
+      Object.entries(filters).forEach(([traitType, values]) => {
+        data = data.filter((techa) => {
+          const attribute = techa.attributes.find(
+            (attribute) => attribute.trait_type === traitType
+          );
+          if (!attribute) {
+            return false;
+          }
+          return values.includes(attribute.value);
+        });
+      });
+    }
+
+    return data;
+  }, [filters, index]);
 
   return {
     filteredTacha,
-    // filterTecha,
+    handleSetIndex,
     handleSetfileters,
   };
 };

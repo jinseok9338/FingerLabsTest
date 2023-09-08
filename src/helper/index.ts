@@ -6,3 +6,8 @@ export const makeOptions = (options: string[]) => {
     };
   });
 };
+
+export const validateNumber = (value: string) => {
+  // if the value is not number return false otherwide return true
+  return !isNaN(Number(value));
+};
