@@ -6,9 +6,8 @@ interface SearchInputProps {
 }
 
 const SearchInput = ({ onChange }: SearchInputProps) => {
-  const [value, setValue] = useState(""); // local state to keep track of input value
-  const [warning, setWarning] = useState(""); // local state to keep track of input value
-
+  const [value, setValue] = useState("");
+  const [warning, setWarning] = useState("");
   const clearWarning = () => setWarning("");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
