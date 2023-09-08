@@ -17,12 +17,9 @@ const useData = () => {
 
   const [index, setIndex] = useState<string>("");
 
-  const handleSetIndex = useCallback(
-    (int: string) => {
-      setIndex(int);
-    },
-    [index]
-  );
+  const handleSetIndex = useCallback((int: string) => {
+    setIndex(int);
+  }, []);
 
   const handleSetfileters = useCallback(
     (traitType: traitTypes, value: string[]) => {
@@ -40,7 +37,7 @@ const useData = () => {
         return filteredObject;
       });
     },
-    [filters]
+    []
   );
 
   const filteredTacha = useMemo(() => {
