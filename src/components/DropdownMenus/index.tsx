@@ -14,12 +14,13 @@ function DropDownMenus({ onChange }: DropDownMenusProps) {
 
   return (
     <div className="mt-2 mb-2">
-      {optionsMap.map((option) => (
-        <>
+      {optionsMap.map((option, index) => (
+        <div key={option.title + index}>
           <h2 className="mb-1">{option.title}</h2>
           <Select
             clearable
             multi
+            placeholder={`${option.title}을 선택하시오`}
             name="colors"
             options={option.options}
             className="basic-multi-select"
@@ -29,7 +30,7 @@ function DropDownMenus({ onChange }: DropDownMenusProps) {
               onChange(option.title, valuesString);
             }}
           />
-        </>
+        </div>
       ))}
     </div>
   );
