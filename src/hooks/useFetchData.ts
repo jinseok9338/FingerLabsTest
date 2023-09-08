@@ -44,9 +44,6 @@ const useData = () => {
   );
 
   const filteredTacha = useMemo(() => {
-    console.log("filters", filters);
-    console.log("index", index);
-
     let data = numberAddedtechaData;
     if (index) {
       data = numberAddedtechaData.filter((techa) =>

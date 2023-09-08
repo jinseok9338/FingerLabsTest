@@ -6,7 +6,7 @@ import useData from "./hooks/useFetchData";
 
 function App() {
   const { filteredTacha, handleSetIndex, handleSetfileters } = useData();
-  console.log(filteredTacha);
+
   return (
     <div className="flex ">
       <div className="w-1/4 bg-gray-200 p-4 ">

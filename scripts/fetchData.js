@@ -3,21 +3,9 @@
 import axios from "axios"
 import fs from "fs"
 
-// fetch data url and return data and write in the src/data/index.ts
-
-//from 0 to 1000
-//fetch data from https://planet-miya.sunmiya.club/techa/{index}.json
-// and make it into array of Techa
-
-
-
-
-
 
 const BATCH_SIZE = 50;
 
-
-const MAX_RETRIES = 3;
 
 
 const fetchTecha = async () => {
@@ -32,7 +20,7 @@ const fetchTecha = async () => {
         techaPromises.push(promise);
       }
   
-      // Wait for all promises in the current batch to resolve
+
       try {
         const newBatch = await Promise.all(techaPromises);
         techaDataJson = [...techaDataJson, ...newBatch];
@@ -46,7 +34,7 @@ const fetchTecha = async () => {
   };
 
 
-// write in the src/data/index.ts
+
 
 
 fetchTecha()
